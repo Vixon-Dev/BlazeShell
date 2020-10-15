@@ -1,24 +1,25 @@
+const DefaultCursor = ">";
+var fs = require('fs');
 const { exec } = require("child_process");
 const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
   })
-  
 
-mainShellLoop = () => {
-    readline.question('_>', (result) => {
-        exec(result, (error, stdout, stderr) =>{
-            if(error) {
-                console.log('BlazeShell: error: ${error.message}');
-                mainShellLoop();
-            }
+CSCursorJson = fs.readFileSync("../src/cursorconfig.json", 'utf8');
+console.dir(CSCursorJson)
+
+ShellLoop = () => {
+    readline.question('>', (result) => {
+        exec(result, (stdout, stderr) =>{
             if (stderr) {
                 console.log(`${stderr}`);
-                mainShellLoop();
+                ShellLoop();
             }
             console.log(`${stdout}`);
-            mainShellLoop();
+            ShellLoop();
         });   
     });
 }
-mainShellLoop();
+ShellLoop();
+
